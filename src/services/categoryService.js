@@ -7,6 +7,29 @@ import {
   updateOne,
   getAll,
 } from './handlersFactory.js';
+import { uploadSingleImage } from '../middlewares/uploadImageMiddleware.js';
+import sharp from 'sharp';
+import { v4 as uuidv4 } from 'uuid';
+import asyncHandler from 'express-async-handler';
+
+// Upload a single image
+const uploadCategoryImage = uploadSingleImage('image');
+
+// Image processing
+const resizeImage = asyncHandler(async (req, _res, next) => {
+  const fileName = `category-${uuidv4()}-${Date.now()}.jpeg`;
+
+  await sharp(req.file.buffer)
+    .resize(600, 600)
+    .toFormat('jpeg')
+    .jpeg({ quality: 95 })
+    .toFile(`uploads/categories/${fileName}`);
+
+  // Save image into our db
+  req.body.image = fileName;
+
+  next();
+});
 
 // @desc   Get List of categories
 // @route  GET /api/v1/categories
@@ -50,4 +73,6 @@ export {
   updateCategory,
   deleteCategory,
   deleteAllCategories,
+  uploadCategoryImage,
+  resizeImage,
 };

@@ -7,6 +7,29 @@ import {
   updateOne,
   getAll,
 } from './handlersFactory.js';
+import { uploadSingleImage } from '../middlewares/uploadImageMiddleware.js';
+import sharp from 'sharp';
+import { v4 as uuidv4 } from 'uuid';
+import asyncHandler from 'express-async-handler';
+
+// Upload a single image
+const uploadBrandImage = uploadSingleImage('image');
+
+// Image processing
+const resizeImage = asyncHandler(async (req, _res, next) => {
+  const fileName = `brand-${uuidv4()}-${Date.now()}.jpeg`;
+
+  await sharp(req.file.buffer)
+    .resize(600, 600)
+    .toFormat('jpeg')
+    .jpeg({ quality: 95 })
+    .toFile(`uploads/brands/${fileName}`);
+
+  // Save image into our db
+  req.body.image = fileName;
+
+  next();
+});
 
 // @desc   Get List of brands
 // @route  GET /api/v1/brands
@@ -51,4 +74,6 @@ export {
   updateBrand,
   deleteBrand,
   deleteAllBrands,
+  uploadBrandImage,
+  resizeImage,
 };

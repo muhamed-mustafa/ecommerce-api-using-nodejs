@@ -12,6 +12,8 @@ import {
   updateBrand,
   deleteBrand,
   deleteAllBrands,
+  uploadBrandImage,
+  resizeImage,
 } from '../services/brandService.js';
 
 const router = express.Router();
@@ -19,13 +21,13 @@ const router = express.Router();
 router
   .route('/')
   .get(getBrands)
-  .post(createBrandValidator, createBrand)
+  .post(uploadBrandImage, resizeImage, createBrandValidator, createBrand)
   .delete(deleteAllBrands);
 
 router
   .route('/:id')
   .get(getBrandValidator, getBrand)
-  .put(updateBrandValidator, updateBrand)
+  .put(uploadBrandImage, resizeImage, updateBrandValidator, updateBrand)
   .delete(deleteBrandValidator, deleteBrand);
 
 export { router as BrandRoute };
