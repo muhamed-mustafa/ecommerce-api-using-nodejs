@@ -8,6 +8,8 @@ import { ProductRoute } from './routes/productRoute.js';
 import { CategoryRoute } from './routes/categoryRoute.js';
 import { subCategoryRoute } from './routes/subCategoryRoute.js';
 import { BrandRoute } from './routes/brandRoute.js';
+import { AuthRoute } from '../src/routes/authRoute.js';
+import { UserRoute } from '../src/routes/userRoute.js';
 import { ApiError } from './utils/apiError.js';
 import { globalError } from './middlewares/globalErrorMiddleware.js';
 
@@ -35,6 +37,8 @@ app.use('/api/v1/products', ProductRoute);
 app.use('/api/v1/categories', CategoryRoute);
 app.use('/api/v1/subCategories', subCategoryRoute);
 app.use('/api/v1/brands', BrandRoute);
+app.use('/api/v1/users', UserRoute);
+app.use('/api/v1/auth', AuthRoute);
 
 app.all('*', (req, _res, next) => {
   next(new ApiError(`Can't find this route : ${req.originalUrl}`, 400));
