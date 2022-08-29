@@ -143,6 +143,7 @@ const updateProductValidator = [
       req.body.slug = slugify(val);
       return true;
     }),
+  body('imageCover').optional(),
   validatiorMiddleware,
 ];
 

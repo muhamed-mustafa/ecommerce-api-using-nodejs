@@ -19,14 +19,16 @@ const uploadBrandImage = uploadSingleImage('image');
 const resizeImage = asyncHandler(async (req, _res, next) => {
   const fileName = `brand-${uuidv4()}-${Date.now()}.jpeg`;
 
-  await sharp(req.file.buffer)
-    .resize(600, 600)
-    .toFormat('jpeg')
-    .jpeg({ quality: 95 })
-    .toFile(`uploads/brands/${fileName}`);
+  if (req.body) {
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat('jpeg')
+      .jpeg({ quality: 95 })
+      .toFile(`uploads/brands/${fileName}`);
 
-  // Save image into our db
-  req.body.image = fileName;
+    // Save image into our db
+    req.body.image = fileName;
+  }
 
   next();
 });
@@ -62,7 +64,7 @@ const updateBrand = updateOne(Brand);
 const deleteBrand = deleteOne(Brand);
 
 // @desc   Delete All Brands
-// @route  DELETE /api/v1/brands/:id
+// @route  DELETE /api/v1/brands
 // @access Private
 
 const deleteAllBrands = deleteAll(Brand);

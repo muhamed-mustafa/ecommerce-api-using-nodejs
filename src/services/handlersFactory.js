@@ -8,11 +8,17 @@ const createOne = (Model) =>
     res.status(201).json({ status: 201, data: newDoc, success: true });
   });
 
-const getOne = (Model) =>
+const getOne = (Model, populationOpt) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
+    // 1) Build Query
+    let query = Model.findById(id);
+    if (populationOpt) {
+      query = query.populate(populationOpt);
+    }
 
-    const document = await Model.findById(id);
+    // 2) Execute Query
+    const document = await query;
 
     if (!document) {
       return next(new ApiError(`No document found for this id : ${id}`, 404));
@@ -23,10 +29,15 @@ const getOne = (Model) =>
 
 const getAll = (Model, modelName = '') =>
   asyncHandler(async (req, res) => {
+    let filter = {};
+    if (req.filterObj) {
+      filter = req.filterObj;
+    }
+
     // 1) Build Query
     const documetsCounts = await Model.countDocuments();
 
-    const apiFeatures = new ApiFeatures(Model.find(), req.query)
+    const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
       .paginate(documetsCounts)
       .filter()
       .search(modelName)
@@ -56,6 +67,7 @@ const updateOne = (Model) =>
       return next(new ApiError(`No document found for this id : ${id}`, 404));
     }
 
+    document.save();
     res.status(200).json({ status: 200, data: document, success: true });
   });
 
@@ -67,6 +79,7 @@ const deleteOne = (Model) =>
       return next(new ApiError(`No document found for this id : ${id}`, 404));
     }
 
+    document.remove();
     res.status(204).json();
   });
 

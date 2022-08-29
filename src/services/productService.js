@@ -70,7 +70,7 @@ const getProducts = getAll(Product, 'Products');
 // @route  GET /api/v1/products/:id
 // @access Public
 
-const getProduct = getOne(Product);
+const getProduct = getOne(Product, 'reviews');
 // @desc   Create Product
 // @route  Post /api/v1/products
 // @access Private
@@ -88,8 +88,9 @@ const updateProduct = updateOne(Product);
 // @access Private
 
 const deleteProduct = deleteOne(Product);
+
 // @desc   Delete All Products
-// @route  DELETE /api/v1/products/:id
+// @route  DELETE /api/v1/products
 // @access Private
 
 const deleteAllProducts = deleteAll(Product);

@@ -38,7 +38,7 @@ const updateSubCategory = updateOne(SubCategory);
 const deleteSubCategory = deleteOne(SubCategory);
 
 // @desc   Delete All SubCategories
-// @route  DELETE /api/v1/subCategories/:id
+// @route  DELETE /api/v1/subCategories
 // @access Private
 
 const deleteAllSubCategories = deleteAll(SubCategory);

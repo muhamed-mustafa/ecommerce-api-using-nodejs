@@ -15,8 +15,11 @@ import {
   uploadProductImages,
   resizeProductImages,
 } from '../services/productService.js';
+import { ReviewRoute } from './reviewRoute.js';
 
 const router = express.Router();
+
+router.use('/:productId/reviews', ReviewRoute);
 
 router
   .route('/')
